@@ -1,0 +1,56 @@
+h1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 2.5rem;
+  color: #eaeef1d8;
+  font-weight: normal;
+}
+
+h2 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 2.5rem;
+  color: #5d656bd8;
+  font-weight: normal;
+}
+h3 {
+  font-size: 1.5rem;
+  color: #eaeef1d8;
+}
+
+/* Introduction Container */
+.top-container {
+  background-color: #3c486b;
+  text-align: center;
+  padding: 100px 200px;
+}
+
+/* Game Containers */
+.first-game {
+  background-color: #f0f0f0;
+  padding: 100px 200px;
+  text-align: left;
+}
+.first-game-text {
+  text-align: center;
+}
+
+.second-game {
+  background-color: #f9d949;
+  padding: 100px 200px;
+  text-align: right;
+}
+
+.third-game {
+  background-color: #f0f0f0;
+  padding: 100px 200px;
+}
+
+.fourth-game {
+  background-color: #f9d949;
+  padding: 100px 200px;
+  text-align: right;
+}
+
+.fifth-game {
+  background-color: #f0f0f0;
+  padding: 100px 200px;
+}
