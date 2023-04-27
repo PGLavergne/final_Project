@@ -216,7 +216,7 @@ while not done:
                                       game.zoom - 2, game.zoom -2])
                     
     font = pygame.font.SysFont('Calibri', 25, True, False)
-    font1 = pygame.font.SysFront('Calibri', 65, True, False)
+    font1 = pygame.font.SysFont('Calibri', 65, True, False)
     text = font.render("Score: " + str(game.score), True, BLACK)
     text_game_over = font1.render("Game Over", True, (255,125,0))
     text_game_over1 = font1.render("Press ESC", True, (255,215, 0))
@@ -231,13 +231,3 @@ while not done:
     
 pygame.quit()
         
-
-            
-            
-
-        
-    
-    
-    
-    
-    
