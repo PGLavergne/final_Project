@@ -1,7 +1,8 @@
 import pygame
 import random
 
-
+#Each color is represented as a tuple of 3 integers
+#First color is black(no red,green, or blue light)
 colors = [
     (0,0,0),
     (120,37,179),
@@ -10,11 +11,18 @@ colors = [
     (80,134,22),
     (180,34,22),
     (180,34,122),
+    (180,14,156),
+    (100,0,78),
+    (120,89,10),
 ]
 #The figure class, arraylist/sequence for our figures
-#main list contains figure types
 #numbers in each figure represent positions in 4x4 matrix
 #Try and add some missing figures
+#Each shape is represented as a list of lists
+#The first list in each shape contains the indices of the squares that make up the top half of the shape
+#The second list contains the indices of the squares that make up the bottom half of the shape
+#For example, the first shape in the list is the L-shaped piece, represented as:
+#[[1,5,9,13], [4,5,6,7]]
 class Figure:
     
     x = 0
@@ -27,7 +35,8 @@ class Figure:
         [[1,4,5,6], [1,4,5,9], [4,5,6,9], [1,5,6,9]],
         [[1,2,5,6]],
     ]
-
+    #Constructor that creates random shapes from the given list of figures
+    #Assigns a random color
     def __init__(self,x,y):
         self.x = x
         self.y = y
@@ -35,26 +44,32 @@ class Figure:
         self.color = random.randint(1, len(colors) - 1)
         self.rotation = 0
     
+    #Returns current image of the tetris piece based on its type and rotation
     def image(self):
         return self.figures[self.type][self.rotation]
 
+    #Rotates the tetris piece by updating its rotation attribute
+    #Increment by 1 and mod to wrap back to 0 if it exceeds the maximum number of rotations for the current type
+    #Ex) If the current type is 0, then there are 2 possible rotations
     def rotate(self):
         self.rotation = (self.rotation + 1) % len(self.figures[self.type])
         
 
 #Now we begin with the tetris class
-#state tells us if were still playing or not
-#field is the field of the game that contains 0's where it is empty and colors where there are figures
 
 class Tetris:
     
+    #Constructor, initializes various attributes of the tetris game,creates empty field, and sets game state to 'start'
     def __init__(self,height,width):
         self.level = 2
         self.score = 0
+        self.piecesplaced = 0
         self.state = "start"
+        #Creates an empty list to store the game field
         self.field = []
         self.height = 0
         self.width = 0
+        #Coordinates for the starting tetris piece
         self.x = 100
         self.y = 60
         self.zoom = 20
@@ -62,8 +77,6 @@ class Tetris:
         
         self.height = height
         self.width = width
-        self.field = []
-        self.score = 0
         self.state = "start"
         for i in range(height):
             new_line = []
@@ -77,7 +90,11 @@ class Tetris:
     
     
     #Go in and check each cell in the 4x4 matrix of the current figure
-    #check if self.field[][] > 0
+    #Checks if current position of falling piece intersects with any existing pieces
+    #Method loops over each square of the 4x4 matrix that represents the current position of the falling piece
+    #If the position of the sqaure, plus the current position of the falling piece is out of bounds
+    #or if the square is already occupied by an existing piece
+    #intersection is set to 'True'
     def intersects(self):
         intersection = False
         for i in range(4):
@@ -88,6 +105,8 @@ class Tetris:
                         j +self.figure.x < 0 or \
                         self.field[i + self.figure.y][j + self.figure.x]> 0:
                             intersection = True
+                            
+        
         return intersection
     
     #This method will determine if the figure has reached the bottom and checks for intersections
@@ -97,7 +116,11 @@ class Tetris:
             for j in range(4):
                 if i *4 + j in self.figure.image():
                     self.field[i + self.figure.y][j + self.figure.x] = self.figure.color
+                    
+        #break_lines method called to check if lines have been completed
+        self.piecesplaced+=1
         self.break_lines()
+        #New falling piece generated
         self.new_figure()
         if self.intersects():
             self.state="gameover"
@@ -146,15 +169,13 @@ class Tetris:
 pygame.init()
 
 BLACK = (0,0,0)
-
 WHITE = (255,255,255)
-
 GRAY = (128, 128, 128)
 
 size = (400, 500)
 screen = pygame.display.set_mode(size)
 
-pygame.display.set_caption("Tetris")
+pygame.display.set_caption("PaulAllensCard")
 
 done = False
 clock = pygame.time.Clock()
@@ -195,7 +216,7 @@ while not done:
         if event.key == pygame.K_DOWN:
             pressing_down = False
             
-    screen.fill(WHITE)
+    screen.fill(BLACK)
     
     for i in range(game.height):
         for j in range(game.width):
@@ -215,11 +236,15 @@ while not done:
                                       game.y + game.zoom *(i + game.figure.y) + 1,
                                       game.zoom - 2, game.zoom -2])
                     
-    font = pygame.font.SysFont('Calibri', 25, True, False)
-    font1 = pygame.font.SysFont('Calibri', 65, True, False)
-    text = font.render("Score: " + str(game.score), True, BLACK)
-    text_game_over = font1.render("Game Over", True, (255,125,0))
+    font = pygame.font.SysFont('Comic Sans MS', 25, True, False)
+    font1 = pygame.font.SysFont('Comic Sans MS', 65, True, False)
+    text = font.render("Score: " + str(game.score), True, WHITE)
+    text2 = font.render("Pieces Placed " + str(game.piecesplaced), True, WHITE)
+    text_game_over = font1.render("YOU SUCK!", True, (255,125,0))
     text_game_over1 = font1.render("Press ESC", True, (255,215, 0))
+    
+
+
     
     screen.blit(text,[0,0])
     if game.state =="gameover":
