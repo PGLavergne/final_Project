@@ -117,8 +117,9 @@ class Tetris:
                 if i *4 + j in self.figure.image():
                     self.field[i + self.figure.y][j + self.figure.x] = self.figure.color
                     
-        #break_lines method called to check if lines have been completed
+        #Increment total number of pieces placed by 1 after touching the base
         self.piecesplaced+=1
+        #break_lines method called to check if lines have been completed
         self.break_lines()
         #New falling piece generated
         self.new_figure()
@@ -171,6 +172,7 @@ pygame.init()
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 GRAY = (128, 128, 128)
+RED = (255,0,0)
 
 size = (400, 500)
 screen = pygame.display.set_mode(size)
@@ -179,9 +181,13 @@ pygame.display.set_caption("PaulAllensCard")
 
 done = False
 clock = pygame.time.Clock()
+#Controls the speed at which figures fall after holding down
 fps = 25
 game = Tetris(20,10)
 counter = 0
+difficulty1 = "Piece of cake"
+difficulty2 = "Come get some"
+difficulty3 = "Damn I'm good"
 
 pressing_down = False
 
@@ -238,15 +244,23 @@ while not done:
                     
     font = pygame.font.SysFont('Comic Sans MS', 25, True, False)
     font1 = pygame.font.SysFont('Comic Sans MS', 65, True, False)
-    text = font.render("Score: " + str(game.score), True, WHITE)
+    text = font.render("Score: " + str(game.score), True, RED)
     text2 = font.render("Pieces Placed " + str(game.piecesplaced), True, WHITE)
     text_game_over = font1.render("YOU SUCK!", True, (255,125,0))
     text_game_over1 = font1.render("Press ESC", True, (255,215, 0))
     
+    #Attempt to place difficulty buttons
+    easy_button = pygame.Rect(100,200,200,50)
+    hard_button = pygame.Rect(100,300,200,50)
 
+    easy_text = font.render("Easy",True,WHITE) 
+    hard_text = font.render("Hard",True,WHITE)
+
+    
 
     
     screen.blit(text,[0,0])
+    screen.blit(text2,[200,0])
     if game.state =="gameover":
         screen.blit(text_game_over, [20,200])
         screen.blit(text_game_over1, [25,265])
