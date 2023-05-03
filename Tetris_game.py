@@ -169,6 +169,11 @@ class Tetris:
             
 pygame.init()
 
+def increase_speed():
+    global fps
+    fps +=5
+
+#Colors
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 GRAY = (128, 128, 128)
@@ -180,14 +185,18 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("PaulAllensCard")
 
 done = False
+#Controls the speed at which figures fall on their own
 clock = pygame.time.Clock()
 #Controls the speed at which figures fall after holding down
-fps = 25
+fps = 20
 game = Tetris(20,10)
 counter = 0
-difficulty1 = "Piece of cake"
-difficulty2 = "Come get some"
-difficulty3 = "Damn I'm good"
+
+#Establish usable fonts
+font = pygame.font.SysFont('Comic Sans MS', 25, True, False)
+font1 = pygame.font.SysFont('Comic Sans MS', 65, True, False)
+
+
 
 pressing_down = False
 
@@ -218,12 +227,15 @@ while not done:
                 game.go_space()
             if event.key == pygame.K_ESCAPE:
                 game.__init__(20,10)
+    
     if event.type == pygame.KEYUP:
         if event.key == pygame.K_DOWN:
             pressing_down = False
-            
-    screen.fill(BLACK)
+
+       
     
+    
+    screen.fill(BLACK) 
     for i in range(game.height):
         for j in range(game.width):
             pygame.draw.rect(screen, GRAY, [game.x + game.zoom * j, game.y + game.zoom * i, game.zoom,game.zoom], 1)
@@ -242,31 +254,32 @@ while not done:
                                       game.y + game.zoom *(i + game.figure.y) + 1,
                                       game.zoom - 2, game.zoom -2])
                     
-    font = pygame.font.SysFont('Comic Sans MS', 25, True, False)
-    font1 = pygame.font.SysFont('Comic Sans MS', 65, True, False)
+    
     text = font.render("Score: " + str(game.score), True, RED)
     text2 = font.render("Pieces Placed " + str(game.piecesplaced), True, WHITE)
     text_game_over = font1.render("YOU SUCK!", True, (255,125,0))
     text_game_over1 = font1.render("Press ESC", True, (255,215, 0))
     
-    #Attempt to place difficulty buttons
-    easy_button = pygame.Rect(100,200,200,50)
-    hard_button = pygame.Rect(100,300,200,50)
-
-    easy_text = font.render("Easy",True,WHITE) 
-    hard_text = font.render("Hard",True,WHITE)
-
     
 
-    
     screen.blit(text,[0,0])
     screen.blit(text2,[200,0])
     if game.state =="gameover":
         screen.blit(text_game_over, [20,200])
         screen.blit(text_game_over1, [25,265])
-   
+    
+
+    #pygame.display.flip()
+    #clock.tick(fps)
+    if game.score > 1 or game.piecesplaced > 10:
+        clock.tick(30)
+    elif game.score > 5 or game.piecesplaced > 25:
+        clock.tick(40)
+    elif game.score > 15 or game.piecesplaced > 40:
+        clock.tick(75)
+    else:
+        clock.tick(fps)
     pygame.display.flip()
-    clock.tick(fps)
     
 pygame.quit()
         
