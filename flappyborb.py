@@ -2,6 +2,8 @@
 # SW Methods Final 
 # Due: 05/11/2023
 # Initial Imports
+
+#!/usr/bin/env python3
 import pygame 
 import sys 
 import random 
@@ -42,24 +44,24 @@ def draw_pipes(pipes):
             flip_pipe = pygame.transform.flip(pipe_surface, False, True)
             screen.blit(flip_pipe, pipe)
 # Trying to make this better
-# def score_display(game_state):
-#     if game_state == "main_game":
-#         score_surface = font.render(str(int(score)), True, (255, 255, 255))
-#         score_rect = score_surface.get_rect(center = (288//2, 50))
-#         screen.blit(score_surface, score_rect)
-#     if game_state == "game_over":
-#         score_surface = font.render(f'Score: {int(score)}', True, (255, 255, 255))
-#         score_rect = score_surface.get_rect(center = (288//2, 50))
-#         screen.blit(score_surface, score_rect)
+def score_display(game_state):
+    if game_state == "main_game":
+        score_surface = font.render(str(int(score)), True, (255, 255, 255))
+        score_rect = score_surface.get_rect(center = (288//2, 50))
+        screen.blit(score_surface, score_rect)
+    if game_state == "game_over":
+        score_surface = font.render(f'Score: {int(score)}', True, (255, 255, 255))
+        score_rect = score_surface.get_rect(center = (288//2, 50))
+        screen.blit(score_surface, score_rect)
 
-#         high_score_surface = font.render(f'High score: {int(high_score)}', True, (255, 255, 255))
-#         high_score_rect = high_score_surface.get_rect(center = (288//2, 425))
-#         screen.blit(high_score_surface, high_score_rect)
+        high_score_surface = font.render(f'High score: {int(high_score)}', True, (255, 255, 255))
+        high_score_rect = high_score_surface.get_rect(center = (288//2, 425))
+        screen.blit(high_score_surface, high_score_rect)
 
-# def update_score(score, high_score):
-#     if score > high_score:
-#         high_score = score
-#     return high_score
+def update_score(score, high_score):
+    if score > high_score:
+        high_score = score
+    return high_score
 
 
 #----------------
@@ -147,13 +149,13 @@ while True:
         game_active = check_collision(pipe_list) 
         # Check collision
 
-         # update score
-    #     score += 0.01
-    #     high_score = update_score(score, high_score)
-    #     score_display("main_game")
-    # else: 
-    #     screen.blit(message, game_over_rect) 
-    #     score_display("game_over")
+        # update score
+        score += 0.01
+        high_score = update_score(score, high_score)
+        score_display("main_game")
+    else: 
+        screen.blit(message, game_over_rect) 
+        score_display("game_over")
     # Animate floor 
     floor_x_pos -= 1
     game_floor()
