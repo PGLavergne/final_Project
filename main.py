@@ -12,10 +12,12 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 # Define colors
 white = (255, 255, 255)
 black = (0, 0, 0)
-red = (255, 255, 255)
+red = (255, 0, 0)
 
 # Define fonts
-font = pygame.font.Font(None, 36)
+title_font = pygame.font.Font(None, 72)
+subtitle_font = pygame.font.Font(None, 36)
+score_font = pygame.font.Font(None, 36)
 
 # Define game variables
 falling_notes = []
@@ -52,7 +54,7 @@ def check_collision():
                 score += 1
 
 def update_score():
-    score_text = font.render('Score: {}'.format(score), True, white)
+    score_text = score_font.render('Score: {}'.format(score), True, white)
     screen.blit(score_text, (10, 10))
 
 def draw_zones():
@@ -63,15 +65,33 @@ def draw_zones():
         zone_y = screen_height - zone_height
         zone_rect = pygame.Rect(zone_x, zone_y, zone_width, zone_height)
         pygame.draw.rect(screen, white, zone_rect, 2)
-        zone_text = font.render(path.upper(), True, white)
+        zone_text = score_font.render(path.upper(), True, white)
         screen.blit(zone_text, (zone_x + zone_width // 2 - zone_text.get_width() // 2, zone_y + zone_height // 2 - zone_text.get_height() // 2))
 
+def show_title_screen():
+    title_text = title_font.render('Note Catcher', True, white)
+    subtitle_text = subtitle_font.render('Press any key to start', True, white)
+    title_x = screen_width // 2 - title_text.get_width() // 2
+    title_y = screen_height // 3
+    subtitle_x = screen_width // 2 - subtitle_text.get_width() // 2
+    subtitle_y = title_y + title_text.get_height() + 50
+    screen.fill(black)
+    screen.blit(title_text, (title_x, title_y))
+    screen.blit(subtitle_text, (subtitle_x, subtitle_y))
+    pygame.display.flip()
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                waiting = False
 # Game loop
 clock = pygame.time.Clock()
+show_title_screen()
 game_running = True
 
 while game_running:
     # Handle events
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
@@ -80,7 +100,7 @@ while game_running:
                 pressed_paths.add(event.unicode)
 
     # Generate new notes
-    if len(falling_notes) < 4:
+    if len(falling_notes) < 2:
         falling_notes.append(create_note())
 
     # Move and draw notes
