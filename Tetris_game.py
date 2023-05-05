@@ -261,11 +261,14 @@ while not done:
     
     text = font.render("Score: " + str(game.score), True, RED)
     text2 = font.render("Pieces Placed " + str(game.piecesplaced), True, WHITE)
-    text_game_over = font1.render("YOU SUCK!", True, (255,125,0))
+    text_game_over = font1.render("Skill Issue", True, (255,125,0))
     text_game_over1 = font1.render("Press ESC", True, (255,215, 0))
-    
-    
 
+    #Attempt to create labels that appear:
+    text_easy = font1.render("Nice Job!", True, WHITE)
+   
+    
+    
     screen.blit(text,[0,0])
     screen.blit(text2,[200,0])
     if game.state =="gameover":
@@ -277,15 +280,15 @@ while not done:
    
     
     #Increases the speed of the falling objects the longer the game goes on
-    #Normal Speed:
-    if game.piecesplaced > 5:
-        clock.tick(120)
-    elif game.piecesplaced > 4:
+    #Normal Speed-Medium Speed- Insane Speed in the conditional statements
+    if game.piecesplaced > 30:
+        clock.tick(90)
+    elif game.piecesplaced > 20:
         clock.tick(60)
-    elif game.piecesplaced > 1:
+    elif game.piecesplaced > 10:
         clock.tick(25)
     else:
-        clock.tick(10)
+        clock.tick(15)
  
     
 pygame.quit()
