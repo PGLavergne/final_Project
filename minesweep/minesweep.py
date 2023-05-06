@@ -134,7 +134,7 @@ def gameLoop():
     global grid  # Access global var
     grid = []
     global mines
-    t = 100  # Set time
+    t = 1000  # Set time
 
     # Generating mines
     mines = [[random.randrange(0, WIDTH),
