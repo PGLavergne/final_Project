@@ -134,7 +134,7 @@ def gameLoop():
     global grid  # Access global var
     grid = []
     global mines
-    t = 100  # Set time
+    t = 1000  # Set time
 
     # Generating mines
     mines = [[random.randrange(0, WIDTH),
@@ -241,7 +241,7 @@ def gameLoop():
                     if j.flag and j.val != -1:
                         j.mineFalse = True
         else:
-            writeText("You WON!", 10)
+            writeText("You WON!", 50)
             writeText("space to restart", 35, 50)
         # Draw time
         s = str(t // 10)
