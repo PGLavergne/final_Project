@@ -1,0 +1,3 @@
+([('minesweep',
+   '/Users/phillavergne/Desktop/final/minesweep/dist/minesweep',
+   'EXECUTABLE')],)
