@@ -1,3 +1,12 @@
+#Tetris game made for recreational purposes to add to the mini game website
+#Original Source Code Provided by https://levelup.gitconnected.com/writing-tetris-in-python-2a16bddb5318, by officer Jack Traven
+#This is a modified version of that provided source code 
+
+
+
+
+
+
 import pygame
 import random
 

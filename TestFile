@@ -1,0 +1,7 @@
+import pytest
+
+#from Tetris_game import Tetris 
+#from Tetris_game import Figure
+
+print("test")
+
