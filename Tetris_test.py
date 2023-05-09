@@ -37,10 +37,13 @@ def test_freeze():
     b = tetris.piecesplaced
     #If the total number of pieces placed has incremented by one, then success
     assert a < b
-#def test_break_lines():
- #   tetris = Tetris(5,4)
-  #  tetris.figure = Figure(1,4)
-   # tetris.break_lines
+def test_break_lines():
+    tetris = Tetris(100,60)
+    tetris.figure = Figure(0,0)
+    a = tetris.score
+    tetris.break_lines
+    b = tetris.field
+    assert a != b
 
 def test_go_space():
     tetris = Tetris(50,50)
@@ -57,6 +60,27 @@ def test_go_down():
     tetris.go_down()
     b = tetris.figure.y
     assert a < b
+
+def test_go_side():
+    tetris = Tetris(100,60)
+    tetris.figure = Figure(10,20)
+    a = tetris.figure.x
+    tetris.go_side(5)
+    b = tetris.figure.x
+    assert a != b
+
+def test_rotate():
+    tetris = Tetris(100,60)
+    tetris.figure = Figure(10,20)
+    a = tetris.figure.rotation
+    tetris.rotate()
+    b = tetris.figure.rotation 
+    assert a != b
+
+
+    
+
+
 
 
 
