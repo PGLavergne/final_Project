@@ -1,3 +1,12 @@
+#Tetris game made for recreational purposes to add to the mini game website
+#Original Source Code Provided by https://levelup.gitconnected.com/writing-tetris-in-python-2a16bddb5318, by officer Jack Traven
+#This is a modified version of that provided source code 
+
+
+
+
+
+
 import pygame
 import random
 
@@ -17,7 +26,6 @@ colors = [
 ]
 #The figure class, arraylist/sequence for our figures
 #numbers in each figure represent positions in 4x4 matrix
-#Try and add some missing figures
 #Each shape is represented as a list of lists
 #The first list in each shape contains the indices of the squares that make up the top half of the shape
 #The second list contains the indices of the squares that make up the bottom half of the shape
@@ -56,6 +64,7 @@ class Figure:
         
 
 #Now we begin with the tetris class
+#The Tetris class has a variety of attributes, score, width,height, and other setting featured for the game itself
 
 class Tetris:
     
@@ -166,14 +175,15 @@ class Tetris:
         self.figure.rotate()
         if self.intersects():
             self.figure.rotation = old_rotation
-            
+#initialize the game           
 pygame.init()
 
+#Method to increase the speed of the object using the frame rate
 def increase_speed():
     global fps
     fps +=5
 
-#Colors
+#Colors, once again
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 GRAY = (128, 128, 128)
@@ -182,13 +192,14 @@ RED = (255,0,0)
 size = (400, 500)
 screen = pygame.display.set_mode(size)
 
+
 pygame.display.set_caption("PaulAllensCard")
 
 done = False
 #Controls the speed at which figures fall on their own
 clock = pygame.time.Clock()
 #Controls the speed at which figures fall after holding down
-fps = 20
+fps = 25
 game = Tetris(20,10)
 counter = 0
 
@@ -199,7 +210,7 @@ font1 = pygame.font.SysFont('Comic Sans MS', 65, True, False)
 
 
 pressing_down = False
-
+ #Main Game loop
 while not done:
     if game.figure is None:
         game.new_figure()
@@ -236,6 +247,8 @@ while not done:
     
     
     screen.fill(BLACK) 
+    
+    #Loops to draw the figures
     for i in range(game.height):
         for j in range(game.width):
             pygame.draw.rect(screen, GRAY, [game.x + game.zoom * j, game.y + game.zoom * i, game.zoom,game.zoom], 1)
@@ -257,11 +270,14 @@ while not done:
     
     text = font.render("Score: " + str(game.score), True, RED)
     text2 = font.render("Pieces Placed " + str(game.piecesplaced), True, WHITE)
-    text_game_over = font1.render("YOU SUCK!", True, (255,125,0))
+    text_game_over = font1.render("Skill Issue", True, (255,125,0))
     text_game_over1 = font1.render("Press ESC", True, (255,215, 0))
-    
-    
 
+    #Attempt to create labels that appear:
+    text_easy = font1.render("Nice Job!", True, WHITE)
+   
+    
+    
     screen.blit(text,[0,0])
     screen.blit(text2,[200,0])
     if game.state =="gameover":
@@ -269,17 +285,20 @@ while not done:
         screen.blit(text_game_over1, [25,265])
     
 
-    #pygame.display.flip()
-    #clock.tick(fps)
-    if game.score > 1 or game.piecesplaced > 10:
-        clock.tick(30)
-    elif game.score > 5 or game.piecesplaced > 25:
-        clock.tick(40)
-    elif game.score > 15 or game.piecesplaced > 40:
-        clock.tick(75)
-    else:
-        clock.tick(fps)
     pygame.display.flip()
+   
+    
+    #Increases the speed of the falling objects the longer the game goes on
+    #Normal Speed-Medium Speed- Insane Speed in the conditional statements
+    if game.piecesplaced > 30:
+        clock.tick(90)
+    elif game.piecesplaced > 20:
+        clock.tick(60)
+    elif game.piecesplaced > 10:
+        clock.tick(25)
+    else:
+        clock.tick(15)
+ 
     
 pygame.quit()
         

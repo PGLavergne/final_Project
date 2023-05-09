@@ -1,93 +1,102 @@
 from tkinter import*
-import pygame
 import random
 import tkinter as tk
 
+#Screens or the window's higth and weidth 
+Gwidth =600
+Gheight= 600
+speed= 50# speed 
+spaceSize=20
+bodyParts= 5 #body part 
+backround=  "#FFFFFF"
+snake_color= "#0000FF"
+food_color= "#00FF00"
+
 click= tk.Tk() #window define it as click 
-click.title(" Snake Game ")# title 
-click.resizable(0,0)
+click.title("Snake Game")# title 
+#click.resizable(0,0)
 score= 0  # label to show the score
 direction= 'down'
 
-Game_width =700
-Game_height= 700
-speed= 50 # speed 
-space_Size=50
-body_Parts= 5 #body part 
-backround=  "#000000"
-snake_color= " #0000FF"
-food_color= "#00FF00"
-
-label=Label(click, text="Score:{}".format(score))
-label.pack()
-canvas=Canvas(click,bg=backround, height= Game_height,width=Game_width)
+#title for the score 
+Score_label=Label(click, text="Score:{}".format(score), font=('score font',20))
+Score_label.pack()
+canvas=Canvas(click,bg=backround, height= Gheight,width=Gwidth)
 canvas.pack()
 
-
-class Snake: 
+#Class snake with using Canvas class from tkinter
+class Snake(tk.Canvas): 
     def __init__(self):
-        self.body_size=body_Parts
-        self.coordinates= []
-        self.squares=[]
+         super().__init__(click, bg=backround, height=Gheight, width=Gwidth)
+         self.body_size=bodyParts
+         self.coordinates= []
+         self.squares=[]
 
-        for i in range(0, body_Parts):
+         for i in range(0, bodyParts):
             self.coordinates.append([0,0])# for snake to appear in top left 
 
-        for x,y in self.coordinates:
-            square= Canvas. create_rectangle(x,y, x+space_Size, y+space_Size, fill=snake_color, tag= "snake")
-            self.square.append(square)
-        
+         for x,y in self.coordinates:
+            square= canvas.create_rectangle(x,y, x+spaceSize, y+spaceSize, fill=snake_color, tag= "snake")  #making square shapes for snake
+            self.squares.append(square)
+
+ #the object class which is being refered to food       
 class Food: 
     def __init__(self):
-        x=random.randint(0,(screen_width/space_Size)-1) * space_Size
-        y= random.randint(0,(screen_height/space_Size)-1) * space_Size
+        x=random.randint(0,(Gwidth/spaceSize)-1) * spaceSize    # to generated integer by using randint 
+        y= random.randint(0,(Gheight/spaceSize)-1) * spaceSize
         self.coordinates= [x,y]
-        Canvas.create_oval(x,y, x+space_Size, y+ space_Size,fill= food_color, tag= " Food ")
+        self.canvas=canvas
+        self.identity= canvas.create_oval(x, y, x+ spaceSize, y + spaceSize,fill= food_color, tag= "Food")
 
-def next_turn(snake, food):
+
+# function for moves 
+def next_move(snake, food):
+    global score
     x,y= snake.coordinates[0]
     if direction== "up": 
-         y-=space_Size # to move 1 space up
+         y -=spaceSize # to move 1 space up
         
     elif direction== "down":
-        y+=space_Size # to move 1 space down
+        y +=spaceSize # to move 1 space down
         
     elif  direction=="right":
-        x+=space_Size
+        x +=spaceSize
 
     elif  direction=="left":
-        x-=space_Size
+        x -=spaceSize
     snake.coordinates.insert(0,(x,y))
-
-    square= canvas.create_rectangle(x,y, x + space_Size, y+space_Size, fill= snake_color)
+    square= canvas.create_rectangle(x,y, x + spaceSize, y+spaceSize, fill= snake_color)
     snake.squares.insert(0,square)
 
     if x==food.coordinates[0] and y==food.coordinates[1]:
-        global score 
         score += 1
 
-        label.config(text=" Score{}".format(score) )
-        canvas.delete("food")
+        Score_label.config(text=" Score:{}".format(score) )
+        canvas.delete(food.identity)
         food=Food()
     else: 
 
         del snake.coordinates[-1]
-        canvas.delete(snake, square[-1])
+        canvas.delete("snake")
+        canvas.delete(snake.squares[-1])
         del snake.squares[-1]
 
-    if change_direction(snake):
-        game_over()
+    if collisions(snake):
+        gameOver()
     else: 
-        click.after(speed, next_turn, snake, food)
-def change_direction(new_direction):
+        click.after(speed, next_move, snake, food)
+
+#Function for snake to change directions 
+def changeDirection(new_direction):
+    
     global direction
 
-    if new_direction== 'left':
-        if direction != 'right':
+    if new_direction== 'right':
+        if direction != 'left':
             direction=new_direction
 
-    elif new_direction== 'right':
-        if direction != 'left':
+    elif new_direction== 'left':
+        if direction != 'right':
             direction=new_direction
 
     elif new_direction== 'up':
@@ -97,20 +106,26 @@ def change_direction(new_direction):
         if direction != 'up':
             direction=new_direction       
 
-def check_collisions(snake):
+# function for if snake touch the walls or itself 
+def collisions(snake):
     x ,y= snake.coordinates[0]
-    if x<0 or x>=Game_width: 
+    if x<0 or x>=Gwidth: #game width 
+        print("GameOver") 
         return True
-    elif y<0 or y>= Game_height: 
+    elif y<0 or y>= Gheight: #game height 
+        print("GameOver") 
+
         return True
     
     for body_part in  snake.coordinates[1:]: 
         if x==body_part[0] and y== body_part[1]:
-                  return True 
+            print("GameOver") 
+            return True 
     
     return False 
 
-def game_over():
+#Game over function 
+def gameOver():
     canvas.delete(ALL)
     canvas.create_text( canvas.winfo_width()/2 ,
                        canvas.winfo_height()/2, 
@@ -131,14 +146,14 @@ x=int((screen_width/2) - (click_width/2))
 y=int((screen_height/2) - (click_height/2))
 click.geometry(f"{click_width}x{click_height}+{x}+{y}")
 
-click.bind('<left>', lambda even: change_direction('left'))
-click.bind('<right>', lambda even: change_direction('right'))
-click.bind('<up>', lambda even: change_direction('up'))
-click.bind('<down>', lambda even: change_direction('down'))
+click.bind('<Left>', lambda event: changeDirection('left'))
+click.bind('<Right>', lambda event: changeDirection('right'))
+click.bind('<Up>', lambda event: changeDirection('up'))
+click.bind('<Down>', lambda event: changeDirection('down'))
 
 
 snake= Snake()
 food= Food()
-next_turn(snake, food)
+next_move(snake, food)
 
 click.mainloop()
