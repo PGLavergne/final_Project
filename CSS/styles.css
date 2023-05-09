@@ -9,7 +9,7 @@ h2 {
   font-family: "Montserrat", sans-serif;
   font-size: 2.5rem;
   color: #5d656bd8;
-  font-weight: normal;
+  font-weight: 700;
 }
 h3 {
   font-size: 1.5rem;
@@ -24,6 +24,9 @@ p {
 }
 
 /* Introduction Container */
+.download-text {
+  color: red;
+}
 .top-container {
   background-color: #3c486b;
   text-align: center;
@@ -35,6 +38,9 @@ p {
   background-color: #f0f0f0;
   padding: 100px 200px;
   text-align: left;
+}
+.minesweeper-img {
+  position: right;
 }
 .first-game-text {
   text-align: center;
