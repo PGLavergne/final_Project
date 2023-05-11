@@ -1,9 +1,16 @@
 # Aleksander Gomez 
 # SW Methods Final 
 # Due: 05/11/2023
-# Initial Imports
-# Package Imports
 #--------------------------------------------------------
+'''
+-All image assets are credited to https://github.com/samuelcust/flappy-bird-assets/tree/master/sprites 
+These assets were a big help in being able to make hitboxes easily.
+-Some source coude was made with the help of Chat-GPT with a lot of editing and understanidng gained from 
+Chat-GPT. 
+'''
+#--------------------------------------------------------
+
+
 import sys
 import pygame 
 import sys 
@@ -17,7 +24,7 @@ def game_floor():
       screen.blit(floor_base, (floor_x_pos, 450))
       screen.blit(floor_base, (floor_x_pos + 288, 450))
 
-def check_collision(pipes):
+def check_collision(pipes, bird_rect):
     # Pipe collision
     for pipe in pipes: 
         if bird_rect.colliderect(pipe):
@@ -48,7 +55,7 @@ def draw_pipes(pipes):
             screen.blit(flip_pipe, pipe)
 
 # Score System runs off time instead of passed pipes
-def score_display(game_state):
+def score_display(game_state, score, high_score):
     if game_state == "main_game":
         score_surface = font.render(str(int(score)), True, (255, 255, 255))
         score_rect = score_surface.get_rect(center = (288//2, 50))
@@ -91,8 +98,13 @@ font = pygame.font.Font(font_path, 36)
 background = pygame.image.load('assets/background-day.png').convert()
 
 # Bird
-bird = pygame.image.load('assets/bluebird-midflap.png').convert_alpha()
-bird_rect = bird.get_rect(center = (50, 256))
+import random
+
+bird_images = ['assets/yellowbird-midflap.png', 'assets/bluebird-midflap.png', 'assets/redbird-midflap.png']
+random_bird_image = random.choice(bird_images)
+bird = pygame.image.load(random_bird_image).convert_alpha()
+bird_rect = bird.get_rect(center=(50, 256))
+
 
 # Floor 
 floor_base = pygame.image.load('assets/base.png').convert_alpha()
@@ -151,15 +163,16 @@ if __name__ == '__main__':
             draw_pipes(pipe_list)
 
             # Check collision
-            game_active = check_collision(pipe_list) 
+            game_active = check_collision(pipe_list, bird_rect) 
         
             # Update score
+
             score += 0.01 
             high_score = update_score(score, high_score)
-            score_display("main_game")
+            score_display("main_game", score, high_score)
         else: 
             screen.blit(message, game_over_rect) 
-            score_display("game_over")
+            score_display("game_over", score, high_score)
         # Animate floor 
         floor_x_pos -= 1
         game_floor()
