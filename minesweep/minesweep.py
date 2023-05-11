@@ -22,7 +22,7 @@ sq_mineFalse = pygame.image.load("Sprites/mine_falseAlarm.png")
 
 bg_color = (192, 192, 192)
 grid_color = (128, 128, 128)
-
+#code sourced from pyguru123
 WIDTH = 10  
 HEIGHT = 10  
 mine_num = 9 
